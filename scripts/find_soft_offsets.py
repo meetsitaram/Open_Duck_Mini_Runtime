@@ -28,8 +28,13 @@ print("")
 print("")
 print("")
 print("")
-hwi.set_position_all(hwi.zero_pos)
-time.sleep(1)
+print("get current positions")
+get_present_positions = hwi.get_present_positions()
+for i, joint_name in enumerate(hwi.joints.keys()):
+    print(f"{joint_name} : {get_present_positions[i]}")
+
+# hwi.set_position_all(hwi.zero_pos)
+# time.sleep(1)
 try:
     for i, joint_name in enumerate(hwi.joints.keys()):
         joint_id = hwi.joints[joint_name]
@@ -38,19 +43,23 @@ try:
             res = input(f" === Setting up {joint_name} === (Y/(s)kip : ").lower()
             if res == "s":
                 break
-            hwi.set_position_all(hwi.zero_pos)
-            time.sleep(0.5)
+            # hwi.set_position_all(hwi.zero_pos)
+            hwi.set_position(joint_name, hwi.zero_pos[joint_name])
+            time.sleep(2)
             current_pos = hwi.get_present_positions()[i]
-            if current_pos is None:
-                continue
+            print(f"Current position for {joint_name} is {current_pos}")
+            # if current_pos is None:
+            #     continue
+
             # hwi.control.kps[i] = 0
             hwi.io.disable_torque([joint_id])
             input(
                 f"{joint_name} is now turned off. Move it to the desired zero position and press any key to confirm the offset"
             )
             new_pos = hwi.get_present_positions()[i]
+            print(f"New position for {joint_name} is {new_pos}")
             offset = new_pos - current_pos
-            print(f" ---> Offset is {offset}")
+            print(f" ---> Offset for {joint_name} is {offset}")
             hwi.joints_offsets[joint_name] = offset
             input(
                 "Press any key to move the motor to its zero position with offset taken into account"
