@@ -6,7 +6,7 @@ from mini_bdx_runtime.duck_config import DuckConfig
 
 
 class HWI:
-    def __init__(self, duck_config: DuckConfig, usb_port: str = "COM5"):
+    def __init__(self, duck_config: DuckConfig, usb_port: str = "/dev/ttyACM0"):
 
         self.duck_config = duck_config
 

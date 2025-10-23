@@ -1,7 +1,7 @@
 from pypot.feetech import FeetechSTS3215IO
 
 io = FeetechSTS3215IO(
-    "COM5",
+    "/dev/ttyACM0",
     baudrate=1000000,
     use_sync_read=True,
 )
