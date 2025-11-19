@@ -4,13 +4,13 @@ import pickle
 import numpy as np
 from mini_bdx_runtime.rustypot_position_hwi import HWI
 
-from mini_bdx_runtime.raw_imu import Imu
-from mini_bdx_runtime.xbox_controller import XBoxController
-from mini_bdx_runtime.feet_contacts import FeetContacts
-from mini_bdx_runtime.eyes import Eyes
-from mini_bdx_runtime.sounds import Sounds
-from mini_bdx_runtime.antennas import Antennas
-from mini_bdx_runtime.projector import Projector
+# from mini_bdx_runtime.raw_imu import Imu
+# from mini_bdx_runtime.xbox_controller import XBoxController
+# from mini_bdx_runtime.feet_contacts import FeetContacts
+# from mini_bdx_runtime.eyes import Eyes
+# from mini_bdx_runtime.sounds import Sounds
+# from mini_bdx_runtime.antennas import Antennas
+# from mini_bdx_runtime.projector import Projector
 from mini_bdx_runtime.rl_utils import make_action_dict
 from mini_bdx_runtime.duck_config import DuckConfig
 
@@ -31,11 +31,15 @@ class RecordAndReplay:
         save_obs=False,
         replay_obs=None,
         display=False,
+        machine='pi',
     ):
 
         self.duck_config = DuckConfig(config_json_path=duck_config_path)
 
+        self.machine = machine
         self.commands = commands
+        if self.machine == 'pc':
+            self.commands = False
         self.pitch_bias = pitch_bias
         self.display = display
 
@@ -55,20 +59,26 @@ class RecordAndReplay:
 
         self.hwi = HWI(self.duck_config, serial_port)
 
-        self.start()
+        # self.start()
 
-        # stop and disable torque if we are only saving observations
-        if self.save_obs:
-            self.hwi.turn_off()
+        # do not start if we are only saving observations
+        if not self.save_obs:
+            self.override_init_pos()
+            self.start()
 
         print("Initializing IMU")
-        self.imu = Imu(
-            sampling_freq=int(self.control_freq),
-            user_pitch_bias=self.pitch_bias,
-            upside_down=self.duck_config.imu_upside_down,
-        )
+        if self.machine != 'pc':
+            self.imu = Imu(
+                sampling_freq=int(self.control_freq),
+                user_pitch_bias=self.pitch_bias,
+                upside_down=self.duck_config.imu_upside_down,
+            )
+        else:
+            self.imu = None
 
-        self.feet_contacts = FeetContacts()
+        self.feet_contacts = None
+        if self.machine != 'pc':
+            self.feet_contacts = FeetContacts()
 
         self.init_pos = list(self.hwi.init_pos.values())
         print("Init pos:", self.init_pos)
@@ -80,24 +90,54 @@ class RecordAndReplay:
         self.paused = self.duck_config.start_paused
 
         self.command_freq = 20  # hz
+        self.xbox_controller = None
         if self.commands:
             self.xbox_controller = XBoxController(self.command_freq)
 
         # Optional expression features
-        if self.duck_config.eyes:
-            self.eyes = Eyes()
-        if self.duck_config.projector:
-            self.projector = Projector()
-        if self.duck_config.speaker:
-            self.sounds = Sounds(
-                volume=1.0, sound_directory="../mini_bdx_runtime/assets/"
-            )
-        if self.duck_config.antennas:
-            self.antennas = Antennas()
+        self.eyes = None
+        self.projector = None
+        self.sounds = None
+        self.antennas = None
+        if self.machine != 'pc':
+            if self.duck_config.eyes:
+                self.eyes = Eyes()
+            if self.duck_config.projector:
+                self.projector = Projector()
+            if self.duck_config.speaker:
+                self.sounds = Sounds(
+                    volume=1.0, sound_directory="../mini_bdx_runtime/assets/"
+                )
+            if self.duck_config.antennas:
+                self.antennas = Antennas()
 
+    def override_init_pos(self):
+                
+        self.hwi.override_init_pos({
+            "left_hip_yaw": -0.007,
+            "left_hip_roll": -0.069,
+            "left_hip_pitch": -0.622,
+            "left_knee": 1.867,
+            "left_ankle": -1.176,
+            "neck_pitch": -0.003,
+            "head_pitch": -0.14,
+            "head_yaw": 0.009,
+            "head_roll": 0.032,
+            # "left_antenna": 0,
+            # "right_antenna": 0,
+            "right_hip_yaw": 0.012,
+            "right_hip_roll": 0.012,
+            "right_hip_pitch": 0.849,
+            "right_knee": 1.858,
+            "right_ankle": -0.916,
+        })
+                
     def get_obs(self):
 
-        imu_data = self.imu.get_data()
+        if self.imu is not None:
+            imu_data = self.imu.get_data()
+        else:
+            imu_data = {'gyro': np.zeros(3), 'accelero': np.zeros(3)}
 
         dof_pos = self.hwi.get_present_positions(
             ignore=[
@@ -126,14 +166,17 @@ class RecordAndReplay:
 
         cmds = self.last_commands
 
-        feet_contacts = self.feet_contacts.get()
+        if self.feet_contacts is not None:
+            feet_contacts = self.feet_contacts.get()
+        else:
+            feet_contacts = np.zeros(4)
 
         obs = np.concatenate(
             [
                 imu_data["gyro"],
                 imu_data["accelero"],
                 cmds,
-                dof_pos - self.init_pos,
+                dof_pos, # - self.init_pos,
                 dof_vel * 0.05,
                 feet_contacts,
                 self.motor_targets,
@@ -199,15 +242,15 @@ class RecordAndReplay:
                         print("obs:", obs)
 
                     if self.buttons.X.triggered:
-                        if self.duck_config.projector:
+                        if self.projector is not None:
                             self.projector.switch()
 
                     if self.buttons.B.triggered:
                         print("B triggered for speaker sound")
-                        if self.duck_config.speaker:
+                        if self.sounds is not None:
                             self.sounds.play_random_sound()
 
-                    if self.duck_config.antennas:
+                    if self.antennas is not None:
                         self.antennas.set_position_left(right_trigger)
                         self.antennas.set_position_right(left_trigger)
 
@@ -236,23 +279,25 @@ class RecordAndReplay:
                     if i < len(self.replay_obs):
                         obs = self.replay_obs[i]
                         # Extract dof_pos from obs: obs[13:27] = dof_pos - init_pos
-                        dof_pos_saved = obs[13:27] + self.init_pos
+                        dof_pos_saved = obs[13:27] # + np.array(self.init_pos)
                         self.motor_targets = dof_pos_saved
+                        # self.motor_targets = np.array(self.init_pos.copy())
                     else:
                         print("BREAKING ")
                         break
 
-                    head_motor_targets = self.last_commands[3:] + self.motor_targets[5:9]
-                    self.motor_targets[5:9] = head_motor_targets
+                    # head_motor_targets = self.last_commands[3:] + self.motor_targets[5:9]
+                    # self.motor_targets[5:9] = head_motor_targets
 
                     action_dict = make_action_dict(
                         self.motor_targets, list(self.hwi.joints.keys())
                     )
 
                     self.hwi.set_position_all(action_dict)
-                else:
+                # else:
                     # In normal mode, update motor_targets for observation, but don't set positions
-                    self.motor_targets = obs[13:27] + np.array(self.init_pos)
+                    # self.motor_targets = obs[13:27] + np.array(self.init_pos)
+                    # self.motor_targets = np.array(self.init_pos.copy())
 
                 i += 1
 
@@ -266,13 +311,14 @@ class RecordAndReplay:
                 time.sleep(max(0, 1 / self.control_freq - took))
 
         except KeyboardInterrupt:
-            if self.duck_config.antennas:
+            if self.antennas is not None:
                 self.antennas.stop()
-            if self.duck_config.eyes:
+            if self.eyes is not None:
                 self.eyes.stop()
-            if self.duck_config.projector:
+            if self.projector is not None:
                 self.projector.stop()
-            self.feet_contacts.stop()
+            if self.feet_contacts is not None:
+                self.feet_contacts.stop()
 
         if self.save_obs:
             pickle.dump(self.saved_obs, open("robot_saved_obs.pkl", "wb"))
@@ -319,6 +365,7 @@ if __name__ == "__main__":
         default=False,
         help="display observations in the console",
     )
+    parser.add_argument('--machine', choices=['pc', 'pi'], default='pc')
 
     args = parser.parse_args()
     pid = [args.p, args.i, args.d]
@@ -333,6 +380,7 @@ if __name__ == "__main__":
         save_obs=args.save_obs,
         replay_obs=args.replay_obs,
         display=args.display,
+        machine=args.machine,
     )
-    print("Done instantiating RLWalk")
+    print("Done with RecordAndReplay")
     rl_walk.run()

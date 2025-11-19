@@ -87,6 +87,9 @@ class HWI:
     def set_kp(self, id, kp):
         self.io.set_kps([id], [kp])
 
+    def override_init_pos(self, init_pos):
+        self.init_pos = init_pos
+
     def turn_on(self):
         self.io.set_kps(list(self.joints.values()), self.low_torque_kps)
         print("turn on : low KPS set")

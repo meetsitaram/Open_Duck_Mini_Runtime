@@ -56,3 +56,22 @@ lerobot-calibrate --robot.type=openduckmini_follower --robot.port=COM5 --robot.i
 
 ### action dict in code
 tmp_action_dict: {'left_hip_yaw': np.float64(-0.0340741913318634), 'left_hip_roll': np.float64(0.10542618918418883), 'left_hip_pitch': np.float64(-0.5334340754151344), 'left_knee': np.float64(1.3523554440885783), 'left_ankle': np.float64(-0.6427498515844345), 'neck_pitch': np.float64(0.1498078554868698), 'head_pitch': np.float64(0.10449058562517166), 'head_yaw': np.float64(-0.021760093048214912), 'head_roll': np.float64(-0.14097267389297485), 'right_hip_yaw': np.float64(0.040854054063558576), 'right_hip_roll': np.float64(-0.15652061492204666), 'right_hip_pitch': np.float64(0.8372294402122498), 'right_knee': np.float64(1.457813336789608), 'right_ankle': np.float64(-0.6618384382724762)}
+
+
+
+### piano 
+-saved
+  Motor Targets: [-0.143 -0.037 -0.406  1.015 -0.641 -0.503  0.299 -0.024  0.025 -0.015
+  0.05   0.448  0.964 -0.562]
+
+  DOF Pos (rel): [-0.145 -0.09   0.224 -0.353  0.143 -0.503  0.299 -0.024  0.025 -0.012
+  0.115 -0.187 -0.415  0.234]
+
+
+-replayed
+  Motor Targets: [-0.152 -0.159 -0.398  1.514 -1.033 -0.506  0.159 -0.015  0.057  0.
+  0.127  0.662  1.443 -0.682]
+  
+    DOF Pos (rel): [-0.15  -0.072  0.221 -0.362  0.248 -0.498  0.264 -0.027  0.028 -0.007
+  0.093 -0.195 -0.424  0.236]
+
