@@ -5,8 +5,8 @@
     "expression_features": {
         "eyes": false,
         "projector": false,
-        "antennas": false,
-        "speaker": false,
+        "antennas": true,
+        "speaker": true,
         "microphone": false,
         "camera": false
     },

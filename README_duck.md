@@ -29,3 +29,30 @@ lerobot-calibrate --robot.type=openduckmini_follower --robot.port=COM5 --robot.i
 - changed mini_bdx_runtime/mini_bdx_runtime/rustypot_position_hwi.py, scripts/check_voltage.py to use COM5 port
 
 - while having both lerobot and openduckmini-runtime installed in the same venv, there were some conflicts related to numpy version. changed setup.cfg to have onnxruntime==1.23.1 and numpy==2.2.6 to resolve the conflicts.
+
+- copied all new offests to duck_config.json
+
+
+### captured offsets iin duck_config.json
+- changed head_pitch to -0.150
+
+    "joints_offsets": {
+        "left_hip_yaw": 0.152,
+        "left_hip_roll": 0.105,
+        "left_hip_pitch": 0.856,
+        "left_knee": 0.209,
+        "left_ankle": -0.155,
+        "neck_pitch": 0.065000000000000006,
+        "head_pitch": -0.150,
+        "head_yaw": -0.039999999999999994,
+        "head_roll": 0.003,
+        "right_hip_yaw": 0.029,
+        "right_hip_roll": -0.007,
+        "right_hip_pitch": -0.976,
+        "right_knee": 0.134,
+        "right_ankle": 0.165
+    }
+
+
+### action dict in code
+tmp_action_dict: {'left_hip_yaw': np.float64(-0.0340741913318634), 'left_hip_roll': np.float64(0.10542618918418883), 'left_hip_pitch': np.float64(-0.5334340754151344), 'left_knee': np.float64(1.3523554440885783), 'left_ankle': np.float64(-0.6427498515844345), 'neck_pitch': np.float64(0.1498078554868698), 'head_pitch': np.float64(0.10449058562517166), 'head_yaw': np.float64(-0.021760093048214912), 'head_roll': np.float64(-0.14097267389297485), 'right_hip_yaw': np.float64(0.040854054063558576), 'right_hip_roll': np.float64(-0.15652061492204666), 'right_hip_pitch': np.float64(0.8372294402122498), 'right_knee': np.float64(1.457813336789608), 'right_ankle': np.float64(-0.6618384382724762)}
