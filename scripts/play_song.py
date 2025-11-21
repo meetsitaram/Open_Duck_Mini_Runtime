@@ -1,23 +1,17 @@
 import time
 import pickle
+import json
 
 import numpy as np
 from mini_bdx_runtime.rustypot_position_hwi import HWI
 
-# from mini_bdx_runtime.raw_imu import Imu
-# from mini_bdx_runtime.xbox_controller import XBoxController
-# from mini_bdx_runtime.feet_contacts import FeetContacts
-# from mini_bdx_runtime.eyes import Eyes
-# from mini_bdx_runtime.sounds import Sounds
-# from mini_bdx_runtime.antennas import Antennas
-# from mini_bdx_runtime.projector import Projector
+
 from mini_bdx_runtime.rl_utils import make_action_dict
 from mini_bdx_runtime.duck_config import DuckConfig
 
 import os
 
 HOME_DIR = os.path.expanduser("~")
-
 
 class RecordAndReplay:
     def __init__(
@@ -30,7 +24,8 @@ class RecordAndReplay:
         pitch_bias=0,
         save_obs=False,
         save_as=None,
-        replay_obs=None,
+        piano_positions=None,
+        song_file=None,
         display=False,
         machine='pc',
     ):
@@ -55,13 +50,27 @@ class RecordAndReplay:
         if self.save_obs:
             self.saved_obs = []
 
-        self.replay_obs = replay_obs
-        if self.replay_obs is not None:
-            self.replay_obs = pickle.load(open(self.replay_obs, "rb"))
+        self.piano_positions = piano_positions
+        self.song_file = song_file
+        if self.piano_positions is not None and self.song_file is not None:
+            with open(self.piano_positions, 'r') as f:
+                self.positions = json.load(f)
+            with open(self.song_file, 'r') as f:
+                song_notes = json.load(f)
+            self.note_positions = []
+            for step in song_notes:
+                left_note = step['left']['note']
+                left_position = step['left']['position']
+                right_note = step['right']['note']
+                right_position = step['right']['position']
+                duration = step['duration']
+                left_pos = self.positions['left'][left_position][left_note] if left_note != '0' else self.positions['left']['up']['e']
+                right_pos = self.positions['right'][right_position][right_note] if right_note != '0' else self.positions['right']['up']['e']
+                self.note_positions.append((left_pos, right_pos, duration))
+
 
         self.hwi = HWI(self.duck_config, serial_port)
 
-        # self.start()
 
         # do not start if we are only saving observations
         self.override_init_pos()
@@ -115,46 +124,26 @@ class RecordAndReplay:
                 self.antennas = Antennas()
 
     def override_init_pos(self):
-
-        self.override_pos = {
-            "left_hip_yaw": 0.0398835,
-            "left_hip_roll": 0.02454369,
-            "left_hip_pitch": -0.84062147,
-            "left_knee": 1.81930122,
-            "left_ankle": -0.93112633,
+                
+        self.hwi.override_init_pos({
+            "left_hip_yaw": -0.174,
+            "left_hip_roll": -0.123,
+            "left_hip_pitch": -0.875 ,
+            "left_knee": 1.848 ,
+            "left_ankle": -0.678,
+            
             "neck_pitch": 1.116,
             "head_pitch": -1.155,
-            "head_yaw": -0.0,
+            "head_yaw": -0.146,
             "head_roll": 0.008,
             # "left_antenna": 0,
             # "right_antenna": 0,
-            "right_hip_yaw": 0.02607767,
-            "right_hip_roll": -0.02300971,
-            "right_hip_pitch": 1.01089333,
-            "right_knee": 1.78555364,
-            "right_ankle": -0.76238845,
-        }
-
-        self.hwi.override_init_pos(self.override_pos)
-
-        # self.hwi.override_init_pos({
-        #     "left_hip_yaw": -0.174,
-        #     "left_hip_roll": -0.123,
-        #     "left_hip_pitch": -0.875 ,
-        #     "left_knee": 1.848 ,
-        #     "left_ankle": -0.678,
-        #     "neck_pitch": 1.116,
-        #     "head_pitch": -1.155,
-        #     "head_yaw": -0.146,
-        #     "head_roll": 0.008,
-        #     # "left_antenna": 0,
-        #     # "right_antenna": 0,
-        #     "right_hip_yaw": -0.078,
-        #     "right_hip_roll": 0.203 ,
-        #     "right_hip_pitch": 0.993 ,
-        #     "right_knee": 1.848,
-        #     "right_ankle": -0.677,
-        # })
+            "right_hip_yaw": -0.078,
+            "right_hip_roll": 0.203 ,
+            "right_hip_pitch": 0.993 ,
+            "right_knee": 1.848,
+            "right_ankle": -0.677,
+        })
                 
     def get_obs(self):
 
@@ -223,16 +212,18 @@ class RecordAndReplay:
         print(f"left leg positions: {obs[13:18]} right leg positions: {obs[22:27]}")
 
     def start(self):
-        # kps = [self.pid[0]] * 32 # 14
-        # kds = [self.pid[2]] * 32 # 14
+        # low_kps_pid = [2, 0, 0]
+        # kps = [low_kps_pid[0]] * 14 # 14
+        kds = [self.pid[2]] * 14 # 14
+        kps = [self.pid[0]] * 14 # 14
+        # kds = [self.pid[2]] * 14 # 14
 
         # lower head kps
         # kps[5:9] = [8, 8, 8, 8]
 
-        # self.hwi.set_kps(kps)
-        # self.hwi.set_kds(kds)
+        self.hwi.set_kps(kps)
+        self.hwi.set_kds(kds)
         self.hwi.turn_on()
-
 
         time.sleep(2)
 
@@ -302,34 +293,34 @@ class RecordAndReplay:
                 if self.save_obs:
                     self.saved_obs.append(obs)
 
-                if self.replay_obs is not None:
-                    if i < len(self.replay_obs):
-                        obs = self.replay_obs[i]
+                if self.piano_positions is not None:
+                    if i < len(self.note_positions):
+                        left_pos, right_pos, duration = self.note_positions[i]
+                        current_pos = self.hwi.get_present_positions(
+                            ignore=[
+                                "left_antenna",
+                                "right_antenna",
+                            ]
+                        )
+                        print("current position:", current_pos, "note i:", i)
+                        if current_pos is None:
+                            print("failed to read current positions, skipping")
+                            continue
+                        current_pos[0:5] = left_pos
+                        current_pos[9:14] = right_pos
+
+                        self.motor_targets = np.array(current_pos)
+
+                        action_dict = make_action_dict(
+                            self.motor_targets, list(self.hwi.joints.keys())
+                        )
+                        self.hwi.set_position_all(action_dict)
+                        print(f"Setting positions: left {left_pos}, right {right_pos}, duration {duration}")
                         
-                        print("replay obs:")
-                        self.print_obs(obs)
-
-                        # obs[16]  = obs[16] - 0.300
-                        # obs[17]  = obs[17] - 0.230
-                        # obs[25]  = obs[25] - 0.300
-                        # obs[26] = obs[26] - 0.230 
-
-                        # Extract dof_pos from obs: obs[13:27] = dof_pos - init_pos
-                        dof_pos_saved = obs[13:27] # + np.array(self.init_pos)
-                        self.motor_targets = dof_pos_saved
-                        # self.motor_targets = np.array(self.init_pos.copy())
+                        time.sleep(duration)
                     else:
                         print("BREAKING ")
                         break
-
-                    # head_motor_targets = self.last_commands[3:] + self.motor_targets[5:9]
-                    # self.motor_targets[5:9] = head_motor_targets
-
-                    action_dict = make_action_dict(
-                        self.motor_targets, list(self.hwi.joints.keys())
-                    )
-
-                    self.hwi.set_position_all(action_dict)
                 # else:
                     # In normal mode, update motor_targets for observation, but don't set positions
                     # self.motor_targets = obs[13:27] + np.array(self.init_pos)
@@ -400,11 +391,18 @@ if __name__ == "__main__":
         help="save the run's observations to this file",
     )    
     parser.add_argument(
-        "--replay_obs",
+        "--piano_positions",
         type=str,
         required=False,
-        default=None,
-        help="replay the observations from a previous run (can be from the robot or from mujoco)",
+        default="piano_positions.json",
+        help="path to piano positions JSON file",
+    )
+    parser.add_argument(
+        "--song_file",
+        type=str,
+        required=False,
+        default="song.json",
+        help="path to song JSON file",
     )
     parser.add_argument(
         "--display",
@@ -426,7 +424,8 @@ if __name__ == "__main__":
         pitch_bias=args.pitch_bias,
         save_obs=args.save_obs,
         save_as=args.save_as,
-        replay_obs=args.replay_obs,
+        piano_positions=args.piano_positions,
+        song_file=args.song_file,
         display=args.display,
         machine=args.machine,
     )

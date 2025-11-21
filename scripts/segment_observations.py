@@ -1,5 +1,9 @@
 import time
 import pickle
+import threading
+import queue
+import json
+from pynput.keyboard import Key, Listener
 
 import numpy as np
 from mini_bdx_runtime.rustypot_position_hwi import HWI
@@ -33,6 +37,7 @@ class RecordAndReplay:
         replay_obs=None,
         display=False,
         machine='pc',
+        segment=False,
     ):
 
         self.duck_config = DuckConfig(config_json_path=duck_config_path)
@@ -44,6 +49,7 @@ class RecordAndReplay:
         self.pitch_bias = pitch_bias
         self.display = display
         self.save_as = save_as
+        self.segment = segment
 
         self.num_dofs = 14
 
@@ -64,7 +70,7 @@ class RecordAndReplay:
         # self.start()
 
         # do not start if we are only saving observations
-        self.override_init_pos()
+        # self.override_init_pos()
         if not self.save_obs:
             # self.override_init_pos()
             self.start()
@@ -115,46 +121,25 @@ class RecordAndReplay:
                 self.antennas = Antennas()
 
     def override_init_pos(self):
-
-        self.override_pos = {
-            "left_hip_yaw": 0.0398835,
-            "left_hip_roll": 0.02454369,
-            "left_hip_pitch": -0.84062147,
-            "left_knee": 1.81930122,
-            "left_ankle": -0.93112633,
+                
+        self.hwi.override_init_pos({
+            "left_hip_yaw": -0.174,
+            "left_hip_roll": -0.123,
+            "left_hip_pitch": -0.875 ,
+            "left_knee": 1.848 ,
+            "left_ankle": -0.678,
             "neck_pitch": 1.116,
             "head_pitch": -1.155,
-            "head_yaw": -0.0,
+            "head_yaw": -0.146,
             "head_roll": 0.008,
             # "left_antenna": 0,
             # "right_antenna": 0,
-            "right_hip_yaw": 0.02607767,
-            "right_hip_roll": -0.02300971,
-            "right_hip_pitch": 1.01089333,
-            "right_knee": 1.78555364,
-            "right_ankle": -0.76238845,
-        }
-
-        self.hwi.override_init_pos(self.override_pos)
-
-        # self.hwi.override_init_pos({
-        #     "left_hip_yaw": -0.174,
-        #     "left_hip_roll": -0.123,
-        #     "left_hip_pitch": -0.875 ,
-        #     "left_knee": 1.848 ,
-        #     "left_ankle": -0.678,
-        #     "neck_pitch": 1.116,
-        #     "head_pitch": -1.155,
-        #     "head_yaw": -0.146,
-        #     "head_roll": 0.008,
-        #     # "left_antenna": 0,
-        #     # "right_antenna": 0,
-        #     "right_hip_yaw": -0.078,
-        #     "right_hip_roll": 0.203 ,
-        #     "right_hip_pitch": 0.993 ,
-        #     "right_knee": 1.848,
-        #     "right_ankle": -0.677,
-        # })
+            "right_hip_yaw": -0.078,
+            "right_hip_roll": 0.203 ,
+            "right_hip_pitch": 0.993 ,
+            "right_knee": 1.848,
+            "right_ankle": -0.677,
+        })
                 
     def get_obs(self):
 
@@ -248,49 +233,77 @@ class RecordAndReplay:
 
         return freq
 
+    def keyboard_listener(self, key_queue):
+        def on_press(key):
+            try:
+                k = key.char.lower()
+            except AttributeError:
+                k = str(key).lower()
+            if k in ['s', 'e', 'q']:
+                key_queue.put(k)
+                if k == 'q':
+                    return False  # Stop listener
+        with Listener(on_press=on_press) as listener:
+            listener.join()
+
     def run(self):
         i = 0
         try:
             print("Starting")
             start_t = time.time()
+
+            if self.segment:
+                if self.replay_obs is None:
+                    print("No replay_obs provided for segmentation")
+                    return
+                observations = self.replay_obs
+                print(f"Loaded {len(observations)} observations for segmentation")
+
+                key_queue = queue.Queue()
+                listener_thread = threading.Thread(target=self.keyboard_listener, args=(key_queue,))
+                listener_thread.daemon = True
+                listener_thread.start()
+
+                segments = []
+                current_segment = []
+                recording = False
+                segment_count = 0
+
+                print("Segmentation mode: Press 's' to start a segment, 'e' to end it, 'q' to quit")
+
             while True:
                 left_trigger = 0
                 right_trigger = 0
                 t = time.time()
 
-                if self.commands:
-                    self.last_commands, self.buttons, left_trigger, right_trigger = (
-                        self.xbox_controller.get_last_command()
-                    )
-                    if self.buttons.dpad_right.triggered:
-                        obs = self.get_obs()
-                        if obs is None:
-                            continue
-                        print("obs:", obs)
-
-                    if self.buttons.X.triggered:
-                        if self.projector is not None:
-                            self.projector.switch()
-
-                    if self.buttons.B.triggered:
-                        print("B triggered for speaker sound")
-                        if self.sounds is not None:
-                            self.sounds.play_random_sound()
-
-                    if self.antennas is not None:
-                        self.antennas.set_position_left(right_trigger)
-                        self.antennas.set_position_right(left_trigger)
-
-                    if self.buttons.A.triggered:
-                        self.paused = not self.paused
-                        if self.paused:
-                            print("PAUSE")
-                        else:
-                            print("UNPAUSE")
-
-                if self.paused:
-                    time.sleep(0.1)
-                    continue
+                if self.segment:
+                    try:
+                        key = key_queue.get_nowait()
+                        if key == 's':
+                            if not recording:
+                                current_segment = []
+                                recording = True
+                                print(f"Started segment {segment_count}")
+                            else:
+                                print("Already recording")
+                        elif key == 'e':
+                            if recording:
+                                segments.append(current_segment)
+                                pickle.dump(current_segment, open(f"segment_{segment_count}.pkl", "wb"))
+                                print(f"Saved segment {segment_count} with {len(current_segment)} observations")
+                                segment_count += 1
+                                recording = False
+                            else:
+                                print("Not recording")
+                        elif key == 'q':
+                            if recording:
+                                segments.append(current_segment)
+                                pickle.dump(current_segment, open(f"segment_{segment_count}.pkl", "wb"))
+                                print(f"Saved segment {segment_count} with {len(current_segment)} observations")
+                            print("Quitting segmentation")
+                            break
+                    except queue.Empty:
+                        pass
 
                 obs = self.get_obs()
                 if obs is None:
@@ -305,19 +318,14 @@ class RecordAndReplay:
                 if self.replay_obs is not None:
                     if i < len(self.replay_obs):
                         obs = self.replay_obs[i]
-                        
-                        print("replay obs:")
-                        self.print_obs(obs)
-
-                        # obs[16]  = obs[16] - 0.300
-                        # obs[17]  = obs[17] - 0.230
-                        # obs[25]  = obs[25] - 0.300
-                        # obs[26] = obs[26] - 0.230 
 
                         # Extract dof_pos from obs: obs[13:27] = dof_pos - init_pos
                         dof_pos_saved = obs[13:27] # + np.array(self.init_pos)
                         self.motor_targets = dof_pos_saved
                         # self.motor_targets = np.array(self.init_pos.copy())
+
+                        if self.segment and recording:
+                            current_segment.append(obs)
                     else:
                         print("BREAKING ")
                         break
@@ -329,6 +337,7 @@ class RecordAndReplay:
                         self.motor_targets, list(self.hwi.joints.keys())
                     )
 
+                    # if not self.segment:
                     self.hwi.set_position_all(action_dict)
                 # else:
                     # In normal mode, update motor_targets for observation, but don't set positions
@@ -362,6 +371,20 @@ class RecordAndReplay:
         if self.save_obs:
             save_file = self.save_as if self.save_as is not None else "robot_saved_obs.pkl"
             pickle.dump(self.saved_obs, open(save_file, "wb"))
+
+        if self.segment:
+            # Create metadata JSON
+            metadata = []
+            for idx, segment in enumerate(segments):
+                metadata.append({
+                    "id": str(idx),
+                    "observations_file": f"segment_{idx}.pkl",
+                    "length": len(segment)
+                })
+            with open("segments_metadata.json", "w") as f:
+                json.dump(metadata, f, indent=4)
+            print("Metadata saved to segments_metadata.json")
+
         print("TURNING OFF")
 
 
@@ -413,6 +436,12 @@ if __name__ == "__main__":
         help="display observations in the console",
     )
     parser.add_argument('--machine', choices=['pc', 'pi'], default='pc')
+    parser.add_argument(
+        "--segment",
+        action="store_true",
+        default=False,
+        help="segment the observations from replay_obs into multiple files",
+    )
 
     args = parser.parse_args()
     pid = [args.p, args.i, args.d]
@@ -429,6 +458,7 @@ if __name__ == "__main__":
         replay_obs=args.replay_obs,
         display=args.display,
         machine=args.machine,
+        segment=args.segment,
     )
     print("Done with RecordAndReplay")
     rl_walk.run()

@@ -1,5 +1,6 @@
 import time
 import pickle
+import json
 
 import numpy as np
 from mini_bdx_runtime.rustypot_position_hwi import HWI
@@ -30,7 +31,7 @@ class RecordAndReplay:
         pitch_bias=0,
         save_obs=False,
         save_as=None,
-        replay_obs=None,
+        sequence=None,
         display=False,
         machine='pc',
     ):
@@ -44,6 +45,7 @@ class RecordAndReplay:
         self.pitch_bias = pitch_bias
         self.display = display
         self.save_as = save_as
+        self.sequence = sequence
 
         self.num_dofs = 14
 
@@ -55,16 +57,27 @@ class RecordAndReplay:
         if self.save_obs:
             self.saved_obs = []
 
-        self.replay_obs = replay_obs
-        if self.replay_obs is not None:
-            self.replay_obs = pickle.load(open(self.replay_obs, "rb"))
+        if self.sequence is not None:
+            with open("segments_metadata.json", "r") as f:
+                metadata = json.load(f)
+            sequence_ids = [int(x.strip()) for x in self.sequence.split(',')]
+            self.replay_obs = []
+            for sid in sequence_ids:
+                for item in metadata:
+                    if item["id"] == str(sid):
+                        obs_file = item["observations_file"]
+                        obs = pickle.load(open(obs_file, "rb"))
+                        self.replay_obs.extend(obs)
+                        break
+        else:
+            self.replay_obs = None
 
         self.hwi = HWI(self.duck_config, serial_port)
 
         # self.start()
 
         # do not start if we are only saving observations
-        self.override_init_pos()
+        # self.override_init_pos()
         if not self.save_obs:
             # self.override_init_pos()
             self.start()
@@ -115,46 +128,25 @@ class RecordAndReplay:
                 self.antennas = Antennas()
 
     def override_init_pos(self):
-
-        self.override_pos = {
-            "left_hip_yaw": 0.0398835,
-            "left_hip_roll": 0.02454369,
-            "left_hip_pitch": -0.84062147,
-            "left_knee": 1.81930122,
-            "left_ankle": -0.93112633,
+                
+        self.hwi.override_init_pos({
+            "left_hip_yaw": -0.174,
+            "left_hip_roll": -0.123,
+            "left_hip_pitch": -0.875 ,
+            "left_knee": 1.848 ,
+            "left_ankle": -0.678,
             "neck_pitch": 1.116,
             "head_pitch": -1.155,
-            "head_yaw": -0.0,
+            "head_yaw": -0.146,
             "head_roll": 0.008,
             # "left_antenna": 0,
             # "right_antenna": 0,
-            "right_hip_yaw": 0.02607767,
-            "right_hip_roll": -0.02300971,
-            "right_hip_pitch": 1.01089333,
-            "right_knee": 1.78555364,
-            "right_ankle": -0.76238845,
-        }
-
-        self.hwi.override_init_pos(self.override_pos)
-
-        # self.hwi.override_init_pos({
-        #     "left_hip_yaw": -0.174,
-        #     "left_hip_roll": -0.123,
-        #     "left_hip_pitch": -0.875 ,
-        #     "left_knee": 1.848 ,
-        #     "left_ankle": -0.678,
-        #     "neck_pitch": 1.116,
-        #     "head_pitch": -1.155,
-        #     "head_yaw": -0.146,
-        #     "head_roll": 0.008,
-        #     # "left_antenna": 0,
-        #     # "right_antenna": 0,
-        #     "right_hip_yaw": -0.078,
-        #     "right_hip_roll": 0.203 ,
-        #     "right_hip_pitch": 0.993 ,
-        #     "right_knee": 1.848,
-        #     "right_ankle": -0.677,
-        # })
+            "right_hip_yaw": -0.078,
+            "right_hip_roll": 0.203 ,
+            "right_hip_pitch": 0.993 ,
+            "right_knee": 1.848,
+            "right_ankle": -0.677,
+        })
                 
     def get_obs(self):
 
@@ -400,11 +392,11 @@ if __name__ == "__main__":
         help="save the run's observations to this file",
     )    
     parser.add_argument(
-        "--replay_obs",
+        "--sequence",
         type=str,
         required=False,
         default=None,
-        help="replay the observations from a previous run (can be from the robot or from mujoco)",
+        help="comma-separated list of segment IDs to replay (e.g., '0,1,2')",
     )
     parser.add_argument(
         "--display",
@@ -426,7 +418,7 @@ if __name__ == "__main__":
         pitch_bias=args.pitch_bias,
         save_obs=args.save_obs,
         save_as=args.save_as,
-        replay_obs=args.replay_obs,
+        sequence=args.sequence,
         display=args.display,
         machine=args.machine,
     )

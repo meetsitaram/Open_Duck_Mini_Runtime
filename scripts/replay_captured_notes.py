@@ -1,5 +1,6 @@
 import time
 import pickle
+import json
 
 import numpy as np
 from mini_bdx_runtime.rustypot_position_hwi import HWI
@@ -57,11 +58,47 @@ class RecordAndReplay:
 
         self.replay_obs = replay_obs
         if self.replay_obs is not None:
-            self.replay_obs = pickle.load(open(self.replay_obs, "rb"))
+            with open(self.replay_obs, 'r') as f:
+                self.positions = json.load(f)
+            self.note_positions = []
+            notes = ['e', 'f', 'g', 'a', 'b', 'c', 'd']
+            is_first_left_up = True
+            is_first_right_up = True
+            for note in notes:
+                # down position
+                left_down = self.positions['left']['down'][note]
+                
+                # up position
+                left_up = self.positions['left']['up'][note]
+
+                if is_first_left_up:
+                    self.note_positions.insert(0, ('left', 'up', left_up))
+                    is_first_left_up = False
+
+                print("appending note:", note, "left up pos:", left_up)
+                self.note_positions.append(('left', 'up', left_up))
+                self.note_positions.append(('left', 'down', left_down))
+                self.note_positions.append(('left', 'up', left_up))
+
+            for note in notes:
+                # down position
+                right_down = self.positions['right']['down'][note]
+                
+                # up position
+                right_up = self.positions['right']['up'][note]
+
+                if is_first_right_up:
+                    self.note_positions.insert(0, ('right', 'up', right_up))
+                    is_first_right_up = False
+                    
+                print("appending note:", note, "right up pos:", left_up)
+                self.note_positions.append(('right', 'up', right_up))
+                self.note_positions.append(('right', 'down', right_down))
+                self.note_positions.append(('right', 'up', right_up))
+
 
         self.hwi = HWI(self.duck_config, serial_port)
 
-        # self.start()
 
         # do not start if we are only saving observations
         self.override_init_pos()
@@ -115,46 +152,26 @@ class RecordAndReplay:
                 self.antennas = Antennas()
 
     def override_init_pos(self):
-
-        self.override_pos = {
-            "left_hip_yaw": 0.0398835,
-            "left_hip_roll": 0.02454369,
-            "left_hip_pitch": -0.84062147,
-            "left_knee": 1.81930122,
-            "left_ankle": -0.93112633,
+                
+        self.hwi.override_init_pos({
+            "left_hip_yaw": -0.174,
+            "left_hip_roll": -0.123,
+            "left_hip_pitch": -0.875 ,
+            "left_knee": 1.848 ,
+            "left_ankle": -0.678,
+            
             "neck_pitch": 1.116,
             "head_pitch": -1.155,
-            "head_yaw": -0.0,
+            "head_yaw": -0.146,
             "head_roll": 0.008,
             # "left_antenna": 0,
             # "right_antenna": 0,
-            "right_hip_yaw": 0.02607767,
-            "right_hip_roll": -0.02300971,
-            "right_hip_pitch": 1.01089333,
-            "right_knee": 1.78555364,
-            "right_ankle": -0.76238845,
-        }
-
-        self.hwi.override_init_pos(self.override_pos)
-
-        # self.hwi.override_init_pos({
-        #     "left_hip_yaw": -0.174,
-        #     "left_hip_roll": -0.123,
-        #     "left_hip_pitch": -0.875 ,
-        #     "left_knee": 1.848 ,
-        #     "left_ankle": -0.678,
-        #     "neck_pitch": 1.116,
-        #     "head_pitch": -1.155,
-        #     "head_yaw": -0.146,
-        #     "head_roll": 0.008,
-        #     # "left_antenna": 0,
-        #     # "right_antenna": 0,
-        #     "right_hip_yaw": -0.078,
-        #     "right_hip_roll": 0.203 ,
-        #     "right_hip_pitch": 0.993 ,
-        #     "right_knee": 1.848,
-        #     "right_ankle": -0.677,
-        # })
+            "right_hip_yaw": -0.078,
+            "right_hip_roll": 0.203 ,
+            "right_hip_pitch": 0.993 ,
+            "right_knee": 1.848,
+            "right_ankle": -0.677,
+        })
                 
     def get_obs(self):
 
@@ -223,16 +240,18 @@ class RecordAndReplay:
         print(f"left leg positions: {obs[13:18]} right leg positions: {obs[22:27]}")
 
     def start(self):
-        # kps = [self.pid[0]] * 32 # 14
-        # kds = [self.pid[2]] * 32 # 14
+        # low_kps_pid = [2, 0, 0]
+        # kps = [low_kps_pid[0]] * 14 # 14
+        kds = [self.pid[2]] * 14 # 14
+        kps = [self.pid[0]] * 14 # 14
+        # kds = [self.pid[2]] * 14 # 14
 
         # lower head kps
         # kps[5:9] = [8, 8, 8, 8]
 
-        # self.hwi.set_kps(kps)
-        # self.hwi.set_kds(kds)
+        self.hwi.set_kps(kps)
+        self.hwi.set_kds(kds)
         self.hwi.turn_on()
-
 
         time.sleep(2)
 
@@ -303,33 +322,40 @@ class RecordAndReplay:
                     self.saved_obs.append(obs)
 
                 if self.replay_obs is not None:
-                    if i < len(self.replay_obs):
-                        obs = self.replay_obs[i]
-                        
-                        print("replay obs:")
-                        self.print_obs(obs)
+                    if i < len(self.note_positions):
+                        (leg, up_down, pos) = self.note_positions[i]
+                        current_pos = self.hwi.get_present_positions(
+                            ignore=[
+                                "left_antenna",
+                                "right_antenna",
+                            ]
+                        )
+                        print("current position:", current_pos, "note i:", i)
+                        print("leg position to set:", pos, "note i:", i)
+                        if current_pos is None:
+                            print("failed to read current positions, skipping")
+                            continue
+                        if leg == 'left':
+                            current_pos[0:5] = pos
+                        else:
+                            current_pos[9:14] = pos
 
-                        # obs[16]  = obs[16] - 0.300
-                        # obs[17]  = obs[17] - 0.230
-                        # obs[25]  = obs[25] - 0.300
-                        # obs[26] = obs[26] - 0.230 
+                        if current_pos is not None:
+                            self.motor_targets = np.array(current_pos)
 
-                        # Extract dof_pos from obs: obs[13:27] = dof_pos - init_pos
-                        dof_pos_saved = obs[13:27] # + np.array(self.init_pos)
-                        self.motor_targets = dof_pos_saved
-                        # self.motor_targets = np.array(self.init_pos.copy())
+                            action_dict = make_action_dict(
+                                self.motor_targets, list(self.hwi.joints.keys())
+                            )
+                            self.hwi.set_position_all(action_dict)
+                            print(f"Setting {leg} leg to position: {self.motor_targets}")
+                            
+                            if up_down == 'up':
+                                time.sleep(0.2)
+                            else:
+                                time.sleep(1)
                     else:
                         print("BREAKING ")
                         break
-
-                    # head_motor_targets = self.last_commands[3:] + self.motor_targets[5:9]
-                    # self.motor_targets[5:9] = head_motor_targets
-
-                    action_dict = make_action_dict(
-                        self.motor_targets, list(self.hwi.joints.keys())
-                    )
-
-                    self.hwi.set_position_all(action_dict)
                 # else:
                     # In normal mode, update motor_targets for observation, but don't set positions
                     # self.motor_targets = obs[13:27] + np.array(self.init_pos)

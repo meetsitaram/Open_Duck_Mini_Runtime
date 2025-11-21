@@ -75,3 +75,13 @@ tmp_action_dict: {'left_hip_yaw': np.float64(-0.0340741913318634), 'left_hip_rol
     DOF Pos (rel): [-0.15  -0.072  0.221 -0.362  0.248 -0.498  0.264 -0.027  0.028 -0.007
   0.093 -0.195 -0.424  0.236]
 
+
+
+replay obs:
+Observations:
+left leg positions: [-0.117  0.055 -0.055  1.818 -0.935]
+right leg positions: [-0.149 -0.139  0.135  1.849 -0.894]
+actual obs:
+Observations:
+left leg positions: [-0.117  0.067 -0.058  1.814 -0.935]
+right leg positions: [-0.149 -0.153  0.134  1.849 -0.896]

@@ -6,7 +6,7 @@ from mini_bdx_runtime.duck_config import DuckConfig
 
 
 class HWI:
-    def __init__(self, duck_config: DuckConfig, usb_port: str = "COM5"):
+    def __init__(self, duck_config: DuckConfig, usb_port: str = "/dev/ttyACM0"):
 
         self.duck_config = duck_config
 
@@ -146,7 +146,9 @@ class HWI:
             for joint, pos in zip(self.joints.keys(), present_positions)
             if joint not in ignore
         ]
-        return np.array(np.around(present_positions, 3))
+        # print(present_positions )
+        # print(np.array(np.around(present_positions, 3)))
+        return np.array(np.around(present_positions, 8))
 
     def get_present_velocities(self, rad_s=True, ignore=[]):
         """

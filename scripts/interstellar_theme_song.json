@@ -1,0 +1,1213 @@
+[
+    {
+        "description": "in position",
+        "duration": 1,
+        "left": {
+            "note": "0",
+            "position": "up"
+        },
+        "right": {
+            "note": "0",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "left": {
+            "note": "0",
+            "position": "down"
+        },
+        "right": {
+            "note": "0",
+            "position": "down"
+        }
+    },  
+    {
+        "description": "first phase",
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.3,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 2,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },      
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "second phase",
+        "duration": 1,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "second phase a-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.25,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "description": "hand over to b",
+        "duration": 0.25,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+     {
+        "description": "second phase b-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.25,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "description": "hand over to c",
+        "duration": 0.25,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+     {
+        "description": "second phase c-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.25,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "description": "hand over to d",
+        "duration": 0.25,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+     {
+        "description": "second phase d-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.25,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "description": "hand over to a",
+        "duration": 0.25,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "description": "third phase",
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase a-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase hand over to b",
+        "duration": 0.1,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase b-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "b",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "b",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase hand over to c",
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase c-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase hand over to d",
+        "duration": 0.1,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase d-e repetition",
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "d",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.2,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "d",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase hand over to e",
+        "duration": 1,
+        "left": {
+            "note": "e",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },
+    {
+        "description": "third phase e-e finish",
+        "duration": 2,
+        "left": {
+            "note": "e",
+            "position": "down"
+        },
+        "right": {
+            "note": "e",
+            "position": "down"
+        }
+    },
+    {
+        "description": "wrap up",
+        "duration": 1,
+        "left": {
+            "note": "e",
+            "position": "up"
+        },
+        "right": {
+            "note": "e",
+            "position": "up"
+        }
+    },  
+    {
+        "description": "wrap up",
+        "duration": 1,
+        "left": {
+            "note": "0",
+            "position": "up"
+        },
+        "right": {
+            "note": "0",
+            "position": "up"
+        }
+    }, 
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "0",
+            "position": "down"
+        },
+        "right": {
+            "note": "0",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "0",
+            "position": "up"
+        },
+        "right": {
+            "note": "0",
+            "position": "up"
+        }
+    }
+]
