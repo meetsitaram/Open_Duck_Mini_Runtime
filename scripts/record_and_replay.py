@@ -4,13 +4,13 @@ import pickle
 import numpy as np
 from mini_bdx_runtime.rustypot_position_hwi import HWI
 
-# from mini_bdx_runtime.raw_imu import Imu
-# from mini_bdx_runtime.xbox_controller import XBoxController
-# from mini_bdx_runtime.feet_contacts import FeetContacts
-# from mini_bdx_runtime.eyes import Eyes
-# from mini_bdx_runtime.sounds import Sounds
-# from mini_bdx_runtime.antennas import Antennas
-# from mini_bdx_runtime.projector import Projector
+from mini_bdx_runtime.raw_imu import Imu
+from mini_bdx_runtime.xbox_controller import XBoxController
+from mini_bdx_runtime.feet_contacts import FeetContacts
+from mini_bdx_runtime.eyes import Eyes
+from mini_bdx_runtime.sounds import Sounds
+from mini_bdx_runtime.antennas import Antennas
+from mini_bdx_runtime.projector import Projector
 from mini_bdx_runtime.rl_utils import make_action_dict
 from mini_bdx_runtime.duck_config import DuckConfig
 
@@ -213,14 +213,17 @@ class RecordAndReplay:
         if obs is None:
             return 
         # print("Observations:")
-        # print(f"  Gyro: {obs[0:3]}")
-        # print(f"  Accelero: {obs[3:6]}")
-        # print(f"  Commands: {obs[6:13]}")
-        # print(f"  DOF Pos (rel): {obs[13:27]}")
-        # print(f"  DOF Vel: {obs[27:41]}")
-        # print(f"  Feet Contacts: {obs[41:45]}")
-        # print(f"  Motor Targets: {obs[45:59]}")
-        print(f"left leg positions: {obs[13:18]} right leg positions: {obs[22:27]}")
+        if self.machine != 'pc':
+            print(f"  Gyro: {obs[0:3]}")
+            print(f"  Accelero: {obs[3:6]}")
+            print(f"  Commands: {obs[6:13]}")        
+            print(f"  Feet Contacts: {obs[41:45]}")
+            print(f"  Motor Targets: {obs[45:59]}")
+            print(f"  DOF Vel: {obs[27:41]}")
+
+        print(f"  DOF Pos (rel): {obs[13:27]}")
+        
+        # print(f"left leg positions: {obs[13:18]} right leg positions: {obs[22:27]}")
 
     def start(self):
         # kps = [self.pid[0]] * 32 # 14
@@ -262,11 +265,11 @@ class RecordAndReplay:
                     self.last_commands, self.buttons, left_trigger, right_trigger = (
                         self.xbox_controller.get_last_command()
                     )
-                    if self.buttons.dpad_right.triggered:
-                        obs = self.get_obs()
-                        if obs is None:
-                            continue
-                        print("obs:", obs)
+                    # if self.buttons.dpad_right.triggered:
+                    #     obs = self.get_obs()
+                    #     if obs is None:
+                    #         continue
+                    #     print("obs:", obs)
 
                     if self.buttons.X.triggered:
                         if self.projector is not None:

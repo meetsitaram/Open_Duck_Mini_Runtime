@@ -13,6 +13,7 @@
     },
     {
         "duration": 1,
+        "head_move": "look_straight_high",
         "left": {
             "note": "0",
             "position": "down"
@@ -36,6 +37,7 @@
     },
     {
         "duration": 0.3,
+        "head_move": "look_down",
         "left": {
             "note": "c",
             "position": "up"
@@ -322,6 +324,7 @@
     },
     {
         "description": "second phase",
+        "head_move": "look_down_left",
         "duration": 1,
         "left": {
             "note": "a",
@@ -650,6 +653,7 @@
     },
     {
         "description": "third phase",
+        "head_move": "look_straight",
         "duration": 0.5,
         "left": {
             "note": "a",

@@ -5,7 +5,11 @@ import json
 import numpy as np
 from mini_bdx_runtime.rustypot_position_hwi import HWI
 
-
+from mini_bdx_runtime.xbox_controller import XBoxController
+from mini_bdx_runtime.eyes import Eyes
+from mini_bdx_runtime.sounds import Sounds
+from mini_bdx_runtime.antennas import Antennas
+from mini_bdx_runtime.projector import Projector
 from mini_bdx_runtime.rl_utils import make_action_dict
 from mini_bdx_runtime.duck_config import DuckConfig
 
@@ -66,7 +70,12 @@ class RecordAndReplay:
                 duration = step['duration']
                 left_pos = self.positions['left'][left_position][left_note] if left_note != '0' else self.positions['left']['up']['e']
                 right_pos = self.positions['right'][right_position][right_note] if right_note != '0' else self.positions['right']['up']['e']
-                self.note_positions.append((left_pos, right_pos, duration))
+                
+                head_pos = None
+                if 'head_move' in step.keys():
+                    head_pos = self.positions['head'][step['head_move']]
+
+                self.note_positions.append((left_pos, right_pos, duration, head_pos))
 
 
         self.hwi = HWI(self.duck_config, serial_port)
@@ -78,19 +87,9 @@ class RecordAndReplay:
             # self.override_init_pos()
             self.start()
 
-        print("Initializing IMU")
-        if self.machine != 'pc':
-            self.imu = Imu(
-                sampling_freq=int(self.control_freq),
-                user_pitch_bias=self.pitch_bias,
-                upside_down=self.duck_config.imu_upside_down,
-            )
-        else:
-            self.imu = None
+        self.imu = None
 
         self.feet_contacts = None
-        if self.machine != 'pc':
-            self.feet_contacts = FeetContacts()
 
         self.init_pos = list(self.hwi.init_pos.values())
         print("Init pos:", self.init_pos)
@@ -147,10 +146,7 @@ class RecordAndReplay:
                 
     def get_obs(self):
 
-        if self.imu is not None:
-            imu_data = self.imu.get_data()
-        else:
-            imu_data = {'gyro': np.zeros(3), 'accelero': np.zeros(3)}
+        imu_data = {'gyro': np.zeros(3), 'accelero': np.zeros(3)} # dummy data
 
         dof_pos = self.hwi.get_present_positions(
             ignore=[
@@ -179,10 +175,7 @@ class RecordAndReplay:
 
         cmds = self.last_commands
 
-        if self.feet_contacts is not None:
-            feet_contacts = self.feet_contacts.get()
-        else:
-            feet_contacts = np.zeros(4)
+        feet_contacts = np.zeros(4) # dummy data
 
         obs = np.concatenate(
             [
@@ -219,13 +212,19 @@ class RecordAndReplay:
         # kds = [self.pid[2]] * 14 # 14
 
         # lower head kps
-        # kps[5:9] = [8, 8, 8, 8]
+        kps[5:9] = [6, 6, 6, 6]
 
         self.hwi.set_kps(kps)
         self.hwi.set_kds(kds)
         self.hwi.turn_on()
 
         time.sleep(2)
+
+    def reset_and_stop(self):
+        self.hwi.turn_on()
+        time.sleep(2)       
+        self.hwi.turn_off()
+
 
     def get_phase_frequency_factor(self, x_velocity):
 
@@ -253,11 +252,11 @@ class RecordAndReplay:
                     self.last_commands, self.buttons, left_trigger, right_trigger = (
                         self.xbox_controller.get_last_command()
                     )
-                    if self.buttons.dpad_right.triggered:
-                        obs = self.get_obs()
-                        if obs is None:
-                            continue
-                        print("obs:", obs)
+                    # if self.buttons.dpad_right.triggered:
+                    #     obs = self.get_obs()
+                    #     if obs is None:
+                    #         continue
+                    #     print("obs:", obs)
 
                     if self.buttons.X.triggered:
                         if self.projector is not None:
@@ -295,7 +294,7 @@ class RecordAndReplay:
 
                 if self.piano_positions is not None:
                     if i < len(self.note_positions):
-                        left_pos, right_pos, duration = self.note_positions[i]
+                        left_pos, right_pos, duration, head_pos = self.note_positions[i]
                         current_pos = self.hwi.get_present_positions(
                             ignore=[
                                 "left_antenna",
@@ -307,6 +306,8 @@ class RecordAndReplay:
                             print("failed to read current positions, skipping")
                             continue
                         current_pos[0:5] = left_pos
+                        if head_pos is not None:
+                            current_pos[5:9] = head_pos
                         current_pos[9:14] = right_pos
 
                         self.motor_targets = np.array(current_pos)
@@ -354,6 +355,8 @@ class RecordAndReplay:
             save_file = self.save_as if self.save_as is not None else "robot_saved_obs.pkl"
             pickle.dump(self.saved_obs, open(save_file, "wb"))
         print("TURNING OFF")
+
+        self.reset_and_stop()
 
 
 if __name__ == "__main__":
