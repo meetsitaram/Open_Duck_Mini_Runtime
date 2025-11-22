@@ -73,9 +73,13 @@ class RecordAndReplay:
                 
                 head_pos = None
                 if 'head_move' in step.keys():
-                    head_pos = self.positions['head'][step['head_move']]
+                    head_pos = self.positions['head'][step['head_move']] 
 
-                self.note_positions.append((left_pos, right_pos, duration, head_pos))
+                sound = None
+                if 'sound' in step.keys():
+                    sound = step['sound']
+
+                self.note_positions.append((left_pos, right_pos, duration, head_pos, sound))
 
 
         self.hwi = HWI(self.duck_config, serial_port)
@@ -294,7 +298,7 @@ class RecordAndReplay:
 
                 if self.piano_positions is not None:
                     if i < len(self.note_positions):
-                        left_pos, right_pos, duration, head_pos = self.note_positions[i]
+                        left_pos, right_pos, duration, head_pos, sound = self.note_positions[i]
                         current_pos = self.hwi.get_present_positions(
                             ignore=[
                                 "left_antenna",
@@ -318,6 +322,9 @@ class RecordAndReplay:
                         self.hwi.set_position_all(action_dict)
                         print(f"Setting positions: left {left_pos}, right {right_pos}, duration {duration}")
                         
+                        if sound is not None and self.sounds is not None:
+                            self.sounds.play(sound)
+
                         time.sleep(duration)
                     else:
                         print("BREAKING ")
