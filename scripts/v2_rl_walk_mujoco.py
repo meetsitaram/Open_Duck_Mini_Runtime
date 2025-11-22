@@ -115,7 +115,7 @@ class RLWalk:
             self.projector = Projector()
         if self.duck_config.speaker:
             self.sounds = Sounds(
-                volume=1.0, sound_directory="../mini_bdx_runtime/assets/"
+                volume=100.0, sound_directory="../mini_bdx_runtime/assets/"
             )
         if self.duck_config.antennas:
             self.antennas = Antennas()
@@ -164,8 +164,10 @@ class RLWalk:
                 self.last_last_action,
                 self.last_last_last_action,
                 self.motor_targets,
+                # np.array([]),
                 feet_contacts,
                 self.imitation_phase,
+                # np.array([])
             ]
         )
 
@@ -210,6 +212,18 @@ class RLWalk:
                     self.last_commands, self.buttons, left_trigger, right_trigger = (
                         self.xbox_controller.get_last_command()
                     )
+
+                    # if self.buttons.dpad_right.triggered:
+                    #     # 
+                    #     obs = self.get_obs()
+                    #     if obs is None:
+                    #         continue
+                    #     print("obs for projector:", obs)
+                    #     tmp_action_dict = make_action_dict(
+                    #         self.motor_targets, list(self.hwi.joints.keys())
+                    #     )  
+                    #     print("tmp_action_dict:", tmp_action_dict)  
+
                     if self.buttons.dpad_up.triggered:
                         self.phase_frequency_factor_offset += 0.05
                         print(
@@ -224,6 +238,8 @@ class RLWalk:
 
                     if self.buttons.LB.is_pressed:
                         self.phase_frequency_factor = 1.3
+                        # 
+
                     else:
                         self.phase_frequency_factor = 1.0
 
@@ -231,7 +247,9 @@ class RLWalk:
                         if self.duck_config.projector:
                             self.projector.switch()
 
+
                     if self.buttons.B.triggered:
+                        print('triggered B for speaker')
                         if self.duck_config.speaker:
                             self.sounds.play_random_sound()
 

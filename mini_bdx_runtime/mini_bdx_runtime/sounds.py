@@ -55,4 +55,5 @@ if __name__ == "__main__":
     while True:
         # sound_player.play_random_sound()
         sound_player.play_happy()
+        print('plahying happy sounds')
         time.sleep(3)

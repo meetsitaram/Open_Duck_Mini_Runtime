@@ -15,6 +15,7 @@ from mini_bdx_runtime.antennas import Antennas
 from mini_bdx_runtime.projector import Projector
 
 duck_config = DuckConfig()
+duck_config.antennas = True
 
 xbox_controller = XBoxController(50, only_head_control=True)
 
@@ -37,10 +38,10 @@ hwi.set_kds(kds)
 hwi.turn_on()
 
 limits = {
-    "neck_pitch": [-20, 60],
-    "head_pitch": [-60, 45],
-    "head_yaw": [-60, 60],
-    "head_roll": [-20, 20],
+    "neck_pitch": [-20, 50],
+    "head_pitch": [-50, 40],
+    "head_yaw": [-50, 50],
+    "head_roll": [-30, 20],
 }
 
 try:
@@ -97,7 +98,7 @@ try:
                 projector.switch()
 
         # pygame.event.pump()  # process event queue
-        time.sleep(1 / 60)
+        time.sleep(1 / 30)
 except KeyboardInterrupt:
     if duck_config.antennas:
         antennas.stop()

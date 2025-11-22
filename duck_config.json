@@ -3,27 +3,27 @@
     "imu_upside_down": false,
     "phase_frequency_factor_offset": 0.0,
     "expression_features": {
-        "eyes": false,
+        "eyes": true,
         "projector": false,
         "antennas": false,
-        "speaker": false,
+        "speaker": true,
         "microphone": false,
         "camera": false
     },
     "joints_offsets": {
-        "left_hip_yaw": 0.152,
-        "left_hip_roll": 0.105,
-        "left_hip_pitch": 0.856,
-        "left_knee": 0.209,
-        "left_ankle": -0.155,
-        "neck_pitch": 0.061000000000000006,
-        "head_pitch": -0.023,
-        "head_yaw": -0.039999999999999994,
+        "left_hip_yaw": 0.12732041,
+        "left_hip_roll": 0.13652429,
+        "left_hip_pitch": 0.05215535,
+        "left_knee": -0.16260197,
+        "left_ankle": -0.08897089,
+        "neck_pitch": 0.0610000,
+        "head_pitch": -0.15800002,
+        "head_yaw": -0.0399999,
         "head_roll": 0.003,
-        "right_hip_yaw": 0.029,
-        "right_hip_roll": -0.007,
-        "right_hip_pitch": -0.976,
-        "right_knee": 0.134,
-        "right_ankle": 0.165
+        "right_hip_yaw": 0.003067960,
+        "right_hip_roll": -0.0061359299,
+        "right_hip_pitch": -0.06749515,
+        "right_knee": -0.001533979,
+        "right_ankle": 0.13652429
     }
 }
