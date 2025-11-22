@@ -1,0 +1,317 @@
+[
+    {
+        "description": "in position",
+        "duration": 1,
+        "left": {
+            "note": "0",
+            "position": "up"
+        },
+        "right": {
+            "note": "0",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "head_move": "look_straight_high",
+        "left": {
+            "note": "0",
+            "position": "down"
+        },
+        "right": {
+            "note": "0",
+            "position": "down"
+        }
+    },  
+    {
+        "description": "ready for line 1",
+        "duration": 1,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "f",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "head_move": "look_down",
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "f",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "f",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "g",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "g",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "g",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "f",
+            "position": "up"
+        },
+        "right": {
+            "note": "d",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "left": {
+            "note": "f",
+            "position": "down"
+        },
+        "right": {
+            "note": "d",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "f",
+            "position": "up"
+        },
+        "right": {
+            "note": "d",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "f",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "left": {
+            "note": "a",
+            "position": "down"
+        },
+        "right": {
+            "note": "f",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "a",
+            "position": "up"
+        },
+        "right": {
+            "note": "f",
+            "position": "up"
+        }
+    },   
+     {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "f",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "f",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "f",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "down"
+        },
+        "right": {
+            "note": "g",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "g",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "c",
+            "position": "up"
+        },
+        "right": {
+            "note": "g",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "f",
+            "position": "up"
+        },
+        "right": {
+            "note": "d",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "left": {
+            "note": "f",
+            "position": "down"
+        },
+        "right": {
+            "note": "d",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.1,
+        "left": {
+            "note": "f",
+            "position": "down"
+        },
+        "right": {
+            "note": "d",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 0.1,
+        
+        "left": {
+            "note": "f",
+            "position": "down"
+        },
+        "right": {
+            "note": "c",
+            "position": "up"
+        }
+    },
+    {
+        "duration": 1,
+        "head_move": "look_straight",
+        "left": {
+            "note": "f",
+            "position": "up"
+        },
+        "right": {
+            "note": "c",
+            "position": "down"
+        }
+    },
+    {
+        "description": "wrap up",
+        "duration": 1,
+        "left": {
+            "note": "f",
+            "position": "up"
+        },
+        "right": {
+            "note": "c",
+            "position": "up"
+        }
+    },  
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "0",
+            "position": "down"
+        },
+        "right": {
+            "note": "0",
+            "position": "down"
+        }
+    },
+    {
+        "duration": 0.5,
+        "left": {
+            "note": "0",
+            "position": "up"
+        },
+        "right": {
+            "note": "0",
+            "position": "up"
+        }
+    }
+]
